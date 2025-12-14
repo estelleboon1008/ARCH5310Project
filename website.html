@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coastal Flooding & Green Infrastructure</title>
+  <style>
+    body {
+      font-family: "Crimson Text", serif;
+      margin: 0;
+      padding: 0;
+      color: #000;
+      background: #fff;
+    }
+
+    header {
+      padding: 80px 40px;
+      text-align: center;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    header h1 {
+      font-size: 80px;
+      margin-bottom: 40px;
+    }
+
+    .hero-img {
+      background: #8e9c78;
+      border-radius: 24px;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    section {
+      max-width: 1200px;
+      margin: 120px auto;
+      padding: 0 40px;
+    }
+
+    .section-title {
+      font-size: 40px;
+      color: #485c11;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-subtitle {
+      font-size: 60px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-text {
+      font-size: 24px;
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+      color: #6f6f6f;
+    }
+
+    .block {
+      margin-top: 60px;
+    }
+
+    .img-block {
+      width: 100%;
+      border-radius: 24px;
+      margin: 40px 0;
+    }
+
+    .three-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .col-box {
+      padding: 40px;
+      border-top: 1px solid #e9e9e9;
+    }
+
+    .col-number {
+      font-size: 48px;
+      color: #929292;
+      margin-bottom: 5px;
+    }
+
+    .col-title {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .col-text {
+      font-size: 18px;
+      color: #6f6f6f;
+    }
+
+    .btn {
+      background: #485c11;
+      color: white;
+      padding: 40px 40px;
+      border-radius: 1000px;
+      display: inline-block;
+      text-decoration: none;
+      margin-top: 5px;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: 5px;
+      padding: 5px;
+      text-align: center;
+      border-top: 1px solid #e9e9e9;
+    }
+
+    footer h2 {
+      font-size: 48px;
+      margin-bottom: 40px;
+    }
+  </style>
+  <style>
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background: white;
+    margin: 0;
+    padding: 20px;
+}
+
+/* INSTRUCTIONS PANEL */
+#instructions {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+#instructions h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+#instructions ul {
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+/* GAME CONTAINER */
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* PARK ITEMS BAR */
+#parkItems {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.park-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: #d4efdf;
+    text-align: center;
+    border-radius: 6px;
+    cursor: grab;
+    user-select: none;
+    border: 1px solid #bcd9c7;
+    font-weight: bold;
+}
+
+.thumb {
+    width: 70px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+/* CANVAS WITH BACKGROUND IMAGE */
+#canvas {
+    width: 80%;
+    max-width: 900px;
+    height: 600px;
+    background-image: url('/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/field.avif'); /* Replace with your image */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border: 4px solid #7dcea0;
+    border-radius: 12px;
+}
+
+/* PLACED ITEMS */
+.placed {
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    transform-origin: center center;
+}
+
+.placed img {
+    width: 60px;
+    height: auto;
+    pointer-events: none;
+}
+
+/* CONTROL PANEL */
+#controlPanel {
+    position: absolute;
+    background: white;
+    border: 1px solid #aaa;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 2000;
+}
+
+#controlPanel button {
+    width: 100%;
+    margin-top: 5px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#controlPanel input[type="range"] {
+    width: 100%;
+}
+
+/* SAVE BUTTON */
+#saveBtn {
+    margin-top: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>Coastal Flooding & Green Infrastructure</h1>
+    <div class="hero-img">
+      <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/nyc-flooding-hurrican.webp" alt="hero placeholder" />
+    </div>
+  </header>
+
+  <section>
+    <div class="section-title">Relevancy</div>
+    <div class="section-subtitle">Why Does This Matter?</div>
+    <p class="section-text">
+      We need a solution to save your neighborhood and community from flooding. Every year New York City is at risk, and there are no real solutions to mitigate this. This website is meant to educate and provide community members with a way to share their thoughts.
+    </p>
+  </section>
+
+  <section>
+    <div class="section-title">Background & Research</div>
+    <div class="section-subtitle">Literature Review & Data</div>
+    <p class="section-text">Using numbers and data to explain why coastal flooding happens, how it affects New York, and how we can mitigate it.</p>
+    <div class="section-title">Coastal flooding</div>
+    <p class="section-text">
+      Flooding affects all neighborhoods in New York - even yours! This chart shows the neighborhoods that experience large amounts of flooding per buildings in a 100-year flood zone. 
+      <div class="hero-img">
+      <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/flooding neighborhoods.png" alt="hero placeholder" />
+    </div>
+    <div class="section-title">Green Infrastructure</div>
+    <p class="section-text">
+      Green infrastructure is all around us already. But it is unevely divided. Do you see that large green circle at the top of this chart? Yes, that's Central Park. This area serves Manhattan, but is not necessary accesible for the greater New York City area. That is why it is important to implement more accessible green infrastructure. We can do this by introducing more local parks.  
+      <div class="hero-img">
+      <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/download.png" alt="hero placeholder" />
+    </div>
+    </p>
+
+    <div class="block">
+      <div class="section-title">Perspective</div>
+      <div class="section-subtitle">NYCHA Developments</div>
+      <p class="section-text">Where are the current NYCHA developments located? Find out where they are!</p>
+      <iframe src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/nyc_nycha_map.html" width="1100" height="600" frameborder="0"></iframe>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-subtitle">Coastal Flooding Areas in New York City</div>
+    <p class="section-text">Click around in the map to see which areas are affected by coastal flooding. Is your home at a potential risk? </p>
+    <iframe src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/nyc_flood_shades.html" width="1100" height="600" frameborder="0"></iframe>
+
+    <div class="block">
+      <div class="section-subtitle">Current Green Infrastructure in NYC</div>
+      <p class="section-text">Click around in the map to explore the current green infrastructure, and if there are any closeby to your home. </p>
+      <iframe src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/nyc_green_infrastructure_map.html" width="1100" height="600" frameborder="0"></iframe>
+    </div>
+
+    <div class="block">
+      <div class="section-subtitle">Open Lots for Green Infrastructure</div>
+      <p class="section-text">Click to explore open lots available for conversion into parks or other green infrastructure.</p>
+      <iframe src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/nycha_pluto_vacant_proximity.html" width="1100" height="600" frameborder="0"></iframe>
+    </div>
+  </section>
+ <section style="max-width: 1200px; margin: 120px auto; padding: 0 40px;">
+  <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start;">
+    
+    <!-- Text Block -->
+    <div style="flex: 1 1 500px; min-width: 300px;">
+      <h2 style="font-family: 'Crimson Text'; font-size: 54px; margin-bottom: 20px;">Why Green Infrastructure?</h2>
+      <p style="font-family: 'Crimson Text'; font-size: 40px; color: #6F6F6F; line-height: 1.2; margin-bottom: 40px;">
+        How can green infrastructure help us? And what does implementing it into communities look like?
+      </p>
+      
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; gap: 20px; border-top: 1px solid #E9E9E9; padding-top: 20px;">
+          <div style="font-size: 15px; font-family: 'DM Sans'; font-weight: 700; color: #6F6F6F;">01</div>
+          <div style="font-size: 15px; font-family: 'DM Sans'; font-weight: 400;">Environmental Benefits</div>
+        </div>
+        <div style="display: flex; gap: 20px; border-top: 1px solid #E9E9E9; padding-top: 20px;">
+          <div style="font-size: 15px; font-family: 'DM Sans'; font-weight: 700; color: #6F6F6F;">02</div>
+          <div style="font-size: 15px; font-family: 'DM Sans'; font-weight: 400;">Social Benefits</div>
+        </div>
+        <div style="display: flex; gap: 20px; border-top: 1px solid #E9E9E9; padding-top: 20px;">
+          <div style="font-size: 15px; font-family: 'DM Sans'; font-weight: 700; color: #6F6F6F;">03</div>
+          <div style="font-size: 15px; font-family: 'DM Sans'; font-weight: 400;">Economic Benefits</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 1 1 500px; min-width: 300px;">
+      <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/reasons.png" alt="Green Infrastructure" style="width: 100%; border-radius: 30px;">
+    </div>
+    <div style="flex: 1 1 500px; min-width: 300px;">
+      <h2 style="font-family: 'Crimson Text'; font-size: 54px; margin-bottom: 20px;">Types of Green Infrastructure</h2>
+
+  </div>
+</section>
+<section style="max-width: 1200px; margin: 100px auto; padding: 0 20px;">
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+    
+    <div style="flex: 1 1 300px; min-width: 250px; background: white; border-radius: 20px; box-shadow: 0 4px 4px rgba(0,0,0,0.25); outline: 1px #485C11 solid; overflow: hidden;">
+      <div style="padding: 40px 30px 40px; border-bottom: 1px #DFECC6 solid; font-family: 'Rethink Sans'; font-size: 23px; font-weight: 500; color: #485C11;">
+        Parks & Rain Gardens
+      </div>
+      <div style="display: flex; flex-direction: column;">
+        <div class="card-item">Natural filter</div>
+        <div class="card-item">Improved water quality</div>
+        <div class="card-item">Aesthetic and ecological advantages</div>
+        <div class="card-item highlight">Low-maintenance</div>
+        <div class="card-item">Enhances bio-diversity</div>
+        <div class="card-item highlight">Creates habitat for wild-life</div>
+      </div>
+    </div>
+
+    <div style="flex: 1 1 300px; min-width: 250px; background: white; border-radius: 20px; box-shadow: 0 4px 4px rgba(0,0,0,0.25); outline: 1px #485C11 solid; overflow: hidden;">
+      <div style="padding: 40px 30px 40px; border-bottom: 1px #DFECC6 solid; font-family: 'Rethink Sans'; font-size: 23px; font-weight: 500; color: #485C11;">
+        Green Roofs
+      </div>
+      <div style="display: flex; flex-direction: column;">
+        <div class="card-item">Manages storm water runoff</div>
+        <div class="card-item">Mitigation of urban heat island effect</div>
+        <div class="card-item">Improves air quality</div>
+        <div class="card-item highlight">Extended roof life-span</div>
+        <div class="card-item">Amenity space for residents</div>
+        <div class="card-item highlight">Improves health</div>
+      </div>
+    </div>
+
+    <div style="flex: 1 1 300px; min-width: 250px; background: white; border-radius: 20px; box-shadow: 0 4px 4px rgba(0,0,0,0.25); outline: 1px #485C11 solid; overflow: hidden;">
+      <div style="padding: 40px 30px 40px; border-bottom: 1px #DFECC6 solid; font-family: 'Rethink Sans'; font-size: 23px; font-weight: 500; color: #485C11;">
+        Other Porous Surfaces
+      </div>
+      <div style="display: flex; flex-direction: column;">
+        <div class="card-item">Porous pavement and concrete</div>
+        <div class="card-item">Planter boxes</div>
+        <div class="card-item">Tree canopy</div>
+        <div class="card-item highlight">Bio-swales</div>
+        <div class="card-item">Green walls</div>
+        <div class="card-item highlight">Living shorelines</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.card-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 30px;
+  border-bottom: 0.5px #485C11 solid;
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+  line-height: 16.8px;
+  color: #485C11;
+}
+
+.card-item::before {
+  content: '';
+  width: 11.67px;
+  height: 11.67px;
+  background: #6F6F6F;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.card-item.highlight::before {
+  background: #8E9C78;
+}
+</style>
+    <div style="flex: 1 1 300px; min-width: 200px;">
+      <h2 style="font-family: 'Crimson Text'; font-size: 54px; margin-bottom: 5px;">Example of Implemented Green Infrastructure</h2>
+  <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/WhatisGreenInfrastructure.jpg" alt="Placeholder" style="width: 100%; border-radius: 30px;">
+
+</style>
+    <div style="flex: 1 1 300px; min-width: 200px;">
+      <h2 style="font-family: 'Crimson Text'; font-size: 54px; margin-bottom: 5px;">Your Turn: Green infrastructure in Your Community</h2>
+    
+  <section>
+    <div class="three-columns">
+      <div class="col-box">
+        <div class="col-number">01</div>
+        <div class="col-title">Get Started</div>
+        <div class="col-text">Explore an area in your neighborhood that could benefit from green infrastructure.</div>
+      </div>
+
+      <div class="col-box">
+        <div class="col-number">02</div>
+        <div class="col-title">Customize & Configure</div>
+        <div class="col-text">Choose features you'd like to see implemented.</div>
+      </div>
+
+      <div class="col-box">
+        <div class="col-number">03</div>
+        <div class="col-title">Grow Your Neighborhood</div>
+        <div class="col-text">Contribute to reducing flooding by voicing your opinion.</div>
+      </div>
+    </div>
+  </section>
+
+
+<div id="instructions">
+    <h2>How to Use the Park Designer</h2>
+    <ul>
+        <li><b>Drag</b> an item from the park items bar onto the park image to place it.</li>
+        <li><b>Move</b> any placed item by clicking and dragging it around.</li>
+        <li><b>Save</b> your park using the button below. It stores all items in an array.</li>
+    </ul>
+</div>
+
+
+<div id="gameContainer">
+
+    <!-- PARK ITEMS BAR -->
+    <div id="parkItems">
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/tree.png" data-default="60">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/tree.png" class="thumb">
+            Tree
+        </div>
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/bench.png" data-default="60">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/bench.png" class="thumb">
+            Bench
+        </div>
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/pond big.png" data-default="100">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/pond big.png" class="thumb">
+            Pond
+        </div>
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/playground Background Removed.png" data-default="100">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/playground Background Removed.png" class="thumb">
+            Playground
+        </div> 
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/fountain.png" data-default="100">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - main fram/ARCH 5310 - Website/fountain.png" class="thumb">
+            Fountain
+        </div>
+    </div>
+
+    
+    <div id="canvas"></div>
+
+ 
+    <button id="saveBtn">Save Park</button>
+</div>
+
+
+<div id="controlPanel">
+    <label>Size:</label><br>
+    <input type="range" id="sizeSlider" min="20" max="200" value="60"><br>
+    <label>Skew X:</label><br>
+    <input type="range" id="skewXSlider" min="-50" max="50" value="0"><br>
+    <label>Skew Y:</label><br>
+    <input type="range" id="skewYSlider" min="-50" max="50" value="0"><br>
+    <button id="deleteBtn">Delete</button>
+</div>
+
+<script>
+
+document.querySelectorAll(".park-item").forEach(item => {
+    item.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", JSON.stringify({
+            src: item.getAttribute("data-src"),
+            defaultSize: parseInt(item.getAttribute("data-default"))
+        }));
+    });
+});
+
+const canvas = document.getElementById("canvas");
+canvas.addEventListener("dragover", e => e.preventDefault());
+
+
+canvas.addEventListener("drop", e => {
+    e.preventDefault();
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const el = document.createElement("div");
+    el.className = "placed";
+
+    const img = document.createElement("img");
+    img.src = data.src;
+    img.style.width = data.defaultSize + "px";
+    el.appendChild(img);
+
+    const rect = canvas.getBoundingClientRect();
+    el.style.left = (e.clientX - rect.left - data.defaultSize/2) + "px";
+    el.style.top = (e.clientY - rect.top - data.defaultSize/2) + "px";
+
+    // Initial skew values
+    el.dataset.skewX = 0;
+    el.dataset.skewY = 0;
+    el.style.transform = `skewX(0deg) skewY(0deg)`;
+
+    el.addEventListener("mousedown", startDrag);
+    el.addEventListener("click", showControls);
+
+    canvas.appendChild(el);
+});
+
+
+let current = null;
+let offsetX = 0;
+let offsetY = 0;
+
+function startDrag(e) {
+    if (e.target.closest("#controlPanel")) return;
+    current = e.target.closest(".placed");
+
+    const rect = current.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", stopDrag);
+}
+
+function move(e) {
+    if (!current) return;
+    const rect = canvas.getBoundingClientRect();
+    current.style.left = (e.clientX - rect.left - offsetX) + "px";
+    current.style.top = (e.clientY - rect.top - offsetY) + "px";
+}
+
+function stopDrag() {
+    document.removeEventListener("mousemove", move);
+    document.removeEventListener("mouseup", stopDrag);
+    current = null;
+}
+
+
+const panel = document.getElementById("controlPanel");
+const sizeSlider = document.getElementById("sizeSlider");
+const skewXSlider = document.getElementById("skewXSlider");
+const skewYSlider = document.getElementById("skewYSlider");
+const deleteBtn = document.getElementById("deleteBtn");
+let selectedItem = null;
+
+function showControls(e) {
+    selectedItem = e.target.closest(".placed");
+    e.stopPropagation();
+
+    const rect = selectedItem.getBoundingClientRect();
+    panel.style.left = rect.left + "px";
+    panel.style.top = rect.top - 110 + "px";
+
+    const img = selectedItem.querySelector("img");
+    sizeSlider.value = parseInt(img.style.width);
+    skewXSlider.value = selectedItem.dataset.skewX || 0;
+    skewYSlider.value = selectedItem.dataset.skewY || 0;
+
+    panel.style.display = "block";
+}
+
+sizeSlider.addEventListener("input", () => {
+    if (!selectedItem) return;
+    const img = selectedItem.querySelector("img");
+    img.style.width = sizeSlider.value + "px";
+});
+
+skewXSlider.addEventListener("input", () => {
+    if (!selectedItem) return;
+    const skewX = skewXSlider.value;
+    const skewY = selectedItem.dataset.skewY || 0;
+    selectedItem.dataset.skewX = skewX;
+    selectedItem.style.transform = `skewX(${skewX}deg) skewY(${skewY}deg)`;
+});
+
+skewYSlider.addEventListener("input", () => {
+    if (!selectedItem) return;
+    const skewY = skewYSlider.value;
+    const skewX = selectedItem.dataset.skewX || 0;
+    selectedItem.dataset.skewY = skewY;
+    selectedItem.style.transform = `skewX(${skewX}deg) skewY(${skewY}deg)`;
+});
+
+deleteBtn.addEventListener("click", () => {
+    if (selectedItem) {
+        selectedItem.remove();
+        panel.style.display = "none";
+    }
+});
+
+
+document.addEventListener("mousedown", (e) => {
+    if (!e.target.closest(".placed") && !e.target.closest("#controlPanel")) {
+        panel.style.display = "none";
+    }
+});
+
+const saveBtn = document.getElementById("saveBtn");
+
+saveBtn.addEventListener("click", () => {
+    const items = [];
+    document.querySelectorAll("#canvas .placed").forEach(el => {
+        const img = el.querySelector("img");
+        items.push({
+            src: img.src,
+            x: parseInt(el.style.left),
+            y: parseInt(el.style.top),
+            width: parseInt(img.style.width),
+            skewX: parseFloat(el.dataset.skewX),
+            skewY: parseFloat(el.dataset.skewY)
+        });
+    });
+    console.log("Saved park items:", items);
+    alert("Park saved! Thank you for your contribution!");
+});
+</script>
+
+</body>
+</html>
+
+<div style="width: 100%; height: 100%; position: relative; background: white; overflow: hidden">
+    <img style="width: 1200px; height: 620px; left: 45px; top: 1589px; position: absolute; border-radius: 30px" src="https://placehold.co/1200x620" />
+</div>

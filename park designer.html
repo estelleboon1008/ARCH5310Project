@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Park Designer Game</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #e9f7ef;
+    margin: 0;
+    padding: 20px;
+}
+
+/* INSTRUCTIONS PANEL */
+#instructions {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+#instructions h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+#instructions ul {
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+/* GAME CONTAINER */
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* PARK ITEMS BAR */
+#parkItems {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.park-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    background: #d4efdf;
+    text-align: center;
+    border-radius: 6px;
+    cursor: grab;
+    user-select: none;
+    border: 1px solid #bcd9c7;
+    font-weight: bold;
+}
+
+.thumb {
+    width: 70px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+/* CANVAS WITH BACKGROUND IMAGE */
+#canvas {
+    width: 80%;
+    max-width: 900px;
+    height: 600px;
+    background-image: url('/Users/estelleboon/Desktop/ARCH5310/ARCH 5310 - Website/field.avif'); /* Replace with your image */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border: 4px solid #7dcea0;
+    border-radius: 12px;
+}
+
+/* PLACED ITEMS */
+.placed {
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    transform-origin: center center;
+}
+
+.placed img {
+    width: 60px;
+    height: auto;
+    pointer-events: none;
+}
+
+/* CONTROL PANEL */
+#controlPanel {
+    position: absolute;
+    background: white;
+    border: 1px solid #aaa;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    display: none;
+    z-index: 2000;
+}
+
+#controlPanel button {
+    width: 100%;
+    margin-top: 5px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#controlPanel input[type="range"] {
+    width: 100%;
+}
+
+/* SAVE BUTTON */
+#saveBtn {
+    margin-top: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- INSTRUCTIONS PANEL -->
+<div id="instructions">
+    <h2>How to Use the Park Designer</h2>
+    <ul>
+        <li><b>Drag</b> an item from the park items bar onto the park image to place it.</li>
+        <li><b>Move</b> any placed item by clicking and dragging it around.</li>
+        <li><b>Resize</b> an item by clicking it and adjusting the size slider in the pop-up panel.</li>
+        <li><b>Skew</b> an item horizontally and vertically using the sliders.</li>
+        <li><b>Delete</b> an item by clicking it and pressing the red Delete button.</li>
+        <li><b>Save</b> your park using the button below. It stores all items in an array.</li>
+    </ul>
+</div>
+
+<!-- GAME CONTAINER -->
+<div id="gameContainer">
+
+    <!-- PARK ITEMS BAR -->
+    <div id="parkItems">
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH5310/ARCH 5310 - Website/tree.png" data-default="60">
+            <img src="/Users/estelleboon/Desktop/ARCH5310/ARCH 5310 - Website/tree.png" class="thumb">
+            Tree
+        </div>
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - Website/bench.png" data-default="60">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - Website/bench.png" class="thumb">
+            Bench
+        </div>
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - Website/pond big.png" data-default="100">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - Website/pond big.png" class="thumb">
+            Pond
+        </div>
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - Website/playground Background Removed.png" data-default="100">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - Website/playground Background Removed.png" class="thumb">
+            Playground
+        </div> 
+        <div class="park-item" draggable="true" data-src="/Users/estelleboon/Desktop/ARCH 5310 - Website/fountain.png" data-default="100">
+            <img src="/Users/estelleboon/Desktop/ARCH 5310 - Website/fountain.png" class="thumb">
+            Fountain
+        </div>
+    </div>
+
+    <!-- CANVAS -->
+    <div id="canvas"></div>
+
+    <!-- SAVE BUTTON -->
+    <button id="saveBtn">Save Park</button>
+</div>
+
+<!-- CONTROL PANEL -->
+<div id="controlPanel">
+    <label>Size:</label><br>
+    <input type="range" id="sizeSlider" min="20" max="200" value="60"><br>
+    <label>Skew X:</label><br>
+    <input type="range" id="skewXSlider" min="-50" max="50" value="0"><br>
+    <label>Skew Y:</label><br>
+    <input type="range" id="skewYSlider" min="-50" max="50" value="0"><br>
+    <button id="deleteBtn">Delete</button>
+</div>
+
+<script>
+/* ------------------------------
+   DRAGGING ITEMS FROM PARK ITEMS BAR
+------------------------------ */
+document.querySelectorAll(".park-item").forEach(item => {
+    item.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", JSON.stringify({
+            src: item.getAttribute("data-src"),
+            defaultSize: parseInt(item.getAttribute("data-default"))
+        }));
+    });
+});
+
+const canvas = document.getElementById("canvas");
+canvas.addEventListener("dragover", e => e.preventDefault());
+
+/* ------------------------------
+   DROP TO PLACE ITEM ON CANVAS
+------------------------------ */
+canvas.addEventListener("drop", e => {
+    e.preventDefault();
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const el = document.createElement("div");
+    el.className = "placed";
+
+    const img = document.createElement("img");
+    img.src = data.src;
+    img.style.width = data.defaultSize + "px";
+    el.appendChild(img);
+
+    const rect = canvas.getBoundingClientRect();
+    el.style.left = (e.clientX - rect.left - data.defaultSize/2) + "px";
+    el.style.top = (e.clientY - rect.top - data.defaultSize/2) + "px";
+
+    // Initial skew values
+    el.dataset.skewX = 0;
+    el.dataset.skewY = 0;
+    el.style.transform = `skewX(0deg) skewY(0deg)`;
+
+    el.addEventListener("mousedown", startDrag);
+    el.addEventListener("click", showControls);
+
+    canvas.appendChild(el);
+});
+
+/* ------------------------------
+   DRAGGING ITEMS ON CANVAS
+------------------------------ */
+let current = null;
+let offsetX = 0;
+let offsetY = 0;
+
+function startDrag(e) {
+    if (e.target.closest("#controlPanel")) return;
+    current = e.target.closest(".placed");
+
+    const rect = current.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", stopDrag);
+}
+
+function move(e) {
+    if (!current) return;
+    const rect = canvas.getBoundingClientRect();
+    current.style.left = (e.clientX - rect.left - offsetX) + "px";
+    current.style.top = (e.clientY - rect.top - offsetY) + "px";
+}
+
+function stopDrag() {
+    document.removeEventListener("mousemove", move);
+    document.removeEventListener("mouseup", stopDrag);
+    current = null;
+}
+
+/* ------------------------------
+   CONTROL PANEL (DELETE + SIZE + SKEW)
+------------------------------ */
+const panel = document.getElementById("controlPanel");
+const sizeSlider = document.getElementById("sizeSlider");
+const skewXSlider = document.getElementById("skewXSlider");
+const skewYSlider = document.getElementById("skewYSlider");
+const deleteBtn = document.getElementById("deleteBtn");
+let selectedItem = null;
+
+function showControls(e) {
+    selectedItem = e.target.closest(".placed");
+    e.stopPropagation();
+
+    const rect = selectedItem.getBoundingClientRect();
+    panel.style.left = rect.left + "px";
+    panel.style.top = rect.top - 110 + "px";
+
+    const img = selectedItem.querySelector("img");
+    sizeSlider.value = parseInt(img.style.width);
+    skewXSlider.value = selectedItem.dataset.skewX || 0;
+    skewYSlider.value = selectedItem.dataset.skewY || 0;
+
+    panel.style.display = "block";
+}
+
+sizeSlider.addEventListener("input", () => {
+    if (!selectedItem) return;
+    const img = selectedItem.querySelector("img");
+    img.style.width = sizeSlider.value + "px";
+});
+
+skewXSlider.addEventListener("input", () => {
+    if (!selectedItem) return;
+    const skewX = skewXSlider.value;
+    const skewY = selectedItem.dataset.skewY || 0;
+    selectedItem.dataset.skewX = skewX;
+    selectedItem.style.transform = `skewX(${skewX}deg) skewY(${skewY}deg)`;
+});
+
+skewYSlider.addEventListener("input", () => {
+    if (!selectedItem) return;
+    const skewY = skewYSlider.value;
+    const skewX = selectedItem.dataset.skewX || 0;
+    selectedItem.dataset.skewY = skewY;
+    selectedItem.style.transform = `skewX(${skewX}deg) skewY(${skewY}deg)`;
+});
+
+deleteBtn.addEventListener("click", () => {
+    if (selectedItem) {
+        selectedItem.remove();
+        panel.style.display = "none";
+    }
+});
+
+// Hide panel when clicking elsewhere
+document.addEventListener("mousedown", (e) => {
+    if (!e.target.closest(".placed") && !e.target.closest("#controlPanel")) {
+        panel.style.display = "none";
+    }
+});
+
+/* ------------------------------
+   SAVE PARK BUTTON
+------------------------------ */
+const saveBtn = document.getElementById("saveBtn");
+
+saveBtn.addEventListener("click", () => {
+    const items = [];
+    document.querySelectorAll("#canvas .placed").forEach(el => {
+        const img = el.querySelector("img");
+        items.push({
+            src: img.src,
+            x: parseInt(el.style.left),
+            y: parseInt(el.style.top),
+            width: parseInt(img.style.width),
+            skewX: parseFloat(el.dataset.skewX),
+            skewY: parseFloat(el.dataset.skewY)
+        });
+    });
+    console.log("Saved park items:", items);
+    alert("Park saved! Check the console for the array of items.");
+});
+</script>
+
+</body>
+</html>
